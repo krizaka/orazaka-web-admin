@@ -1,0 +1,33 @@
+{
+  "name": "orazaka-web-admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3001",
+    "build": "next build",
+    "start": "next start --port 3001",
+    "lint": "eslint",
+    "validate": "depcruise src --config .dependency-cruiser.cjs && npm run lint"
+  },
+  "dependencies": {
+    "date-fns": "^4.3.0",
+    "next": "^16.3.0",
+    "next-auth": "^4.24.15",
+    "@krizaka/orazaka-design-system": "*",
+    "@krizaka/orazaka-shared": "*",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dependency-cruiser": "^17.4.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

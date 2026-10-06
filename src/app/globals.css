@@ -1,0 +1,15 @@
+/* ═══════════════════════════════════════════════════
+   ORAZAKA WEB-ADMIN (SecOps Console) — Global stylesheet
+   ─────────────────────────────────────────────────
+   Tokens, themes and shared components come from the
+   design system (@krizaka/orazaka-design-system/theme.css) — the
+   single source shared with orazaka-web-client. No tokens
+   are redeclared here (AGENTS.md §8).
+   ═══════════════════════════════════════════════════ */
+
+@import "tailwindcss";
+@import "@krizaka/orazaka-design-system/theme.css";
+
+* {
+  box-sizing: border-box;
+}
