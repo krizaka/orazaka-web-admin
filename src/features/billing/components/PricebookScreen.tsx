@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Badge, Button, Card } from "@krizaka/orazaka-design-system";
+import { Badge, Button } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import { formatCredits, type MarginPreview, type PricebookRate } from "@krizaka/orazaka-shared";
-import { Field } from "./Field";
+import { BillingField } from "./BillingField";
 import { BillingAdminApi } from "@/services/billing.admin.api";
 
 /**
@@ -92,7 +93,7 @@ export function PricebookScreen() {
 
       {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
 
-      <Card>
+      <Card.Root>
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-[var(--text-muted)]">
@@ -128,17 +129,17 @@ export function PricebookScreen() {
             ))}
           </tbody>
         </table>
-      </Card>
+      </Card.Root>
 
       {draft && (
-        <Card>
+        <Card.Root className="p-5">
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-[var(--text-primary)]">
               {draft.capability} · {draft.modelName ?? "défaut"}
             </h3>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <Field
+              <BillingField
                 label="Crédits / unité"
                 type="number"
                 value={String(draft.creditsPerUnit)}
@@ -147,7 +148,7 @@ export function PricebookScreen() {
                   setPreview(null);
                 }}
               />
-              <Field
+              <BillingField
                 label="Minimum"
                 type="number"
                 value={String(draft.minimumCredits)}
@@ -156,7 +157,7 @@ export function PricebookScreen() {
                   setPreview(null);
                 }}
               />
-              <Field
+              <BillingField
                 label="Estimation (hold)"
                 type="number"
                 value={String(draft.estimateCredits)}
@@ -181,7 +182,7 @@ export function PricebookScreen() {
               </Button>
             </div>
           </div>
-        </Card>
+        </Card.Root>
       )}
     </section>
   );

@@ -1,11 +1,11 @@
 import {
   Badge,
   Button,
-  Card,
   Icon,
   ChatShowcase,
   type IconName,
 } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 
 /**
  * SecOps console landing — consumes the shared `orazaka-design-system`
@@ -122,7 +122,7 @@ export default function AdminDashboard() {
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {OPS.map((op) => (
-            <Card key={op.title} className="p-5">
+            <Card.Root key={op.title} className="p-5">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]">
                 <Icon name={op.icon} size={20} />
               </span>
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
               <p className="mt-2 text-[13px] leading-relaxed text-[var(--text-secondary)]">
                 {op.desc}
               </p>
-            </Card>
+            </Card.Root>
           ))}
         </div>
       </section>

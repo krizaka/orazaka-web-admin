@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Card } from "@krizaka/orazaka-design-system";
+import { Button } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import type { BillableUnit, MarginPreview } from "@krizaka/orazaka-shared";
-import { Field } from "./Field";
+import { BillingField } from "./BillingField";
 import { UNITS, type ModelRateDraft } from "./ModelRateDraft";
 
 export interface ModelRateEditorProps {
@@ -34,7 +35,7 @@ export function ModelRateEditor({
   const update = (patch: Partial<ModelRateDraft>) => onChange({ ...draft, ...patch });
 
   return (
-    <Card>
+    <Card.Root className="p-5">
       <article className="space-y-4">
         <header>
           <h3 className="text-sm font-semibold text-[var(--text-primary)]">
@@ -64,20 +65,20 @@ export function ModelRateEditor({
               ))}
             </select>
           </label>
-          <Field
+          <BillingField
             label="Crédits par unité"
             type="number"
             step="0.0001"
             value={String(draft.creditsPerUnit)}
             onChange={(e) => update({ creditsPerUnit: Number(e.target.value) })}
           />
-          <Field
+          <BillingField
             label="Minimum facturé"
             type="number"
             value={String(draft.minimumCredits)}
             onChange={(e) => update({ minimumCredits: Number(e.target.value) })}
           />
-          <Field
+          <BillingField
             label="Estimation réservée (hold)"
             type="number"
             value={String(draft.estimateCredits)}
@@ -110,6 +111,6 @@ export function ModelRateEditor({
           </Button>
         </footer>
       </article>
-    </Card>
+    </Card.Root>
   );
 }

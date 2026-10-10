@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Badge, Card } from "@krizaka/orazaka-design-system";
+import { Badge } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import { formatCredits, type CapabilityUsage } from "@krizaka/orazaka-shared";
 import { BillingAdminApi } from "@/services/billing.admin.api";
 
@@ -44,7 +45,7 @@ export function UsageScreen() {
 
       {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
 
-      <Card>
+      <Card.Root>
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-[var(--text-muted)]">
@@ -94,7 +95,7 @@ export function UsageScreen() {
             })}
           </tbody>
         </table>
-      </Card>
+      </Card.Root>
     </section>
   );
 }

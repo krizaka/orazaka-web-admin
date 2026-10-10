@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Badge, Button, Card } from "@krizaka/orazaka-design-system";
+import { Badge, Button } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import {
   capabilityForModelCategory,
   isModelPriced,
@@ -134,7 +135,7 @@ export function ModelPricingScreen() {
       )}
       {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
 
-      <Card>
+      <Card.Root>
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-[var(--text-muted)]">
@@ -179,7 +180,7 @@ export function ModelPricingScreen() {
             ))}
           </tbody>
         </table>
-      </Card>
+      </Card.Root>
 
       {draft && (
         <ModelRateEditor
