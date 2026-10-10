@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Card, Input } from "@krizaka/orazaka-design-system";
+import { Button, Input } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import { type Entitlement, type Pack } from "@krizaka/orazaka-shared";
-import { Field } from "./Field";
+import { BillingField } from "./BillingField";
 
 /**
  * The pack form — the **price tag**, which is all billing owns since ADR-036.
@@ -35,21 +36,21 @@ export function PackEditor({
   };
 
   return (
-    <Card>
+    <Card.Root className="p-5">
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field
+          <BillingField
             label="Clé"
             value={pack.packKey}
             onChange={(e) => onChange({ ...pack, packKey: e.target.value })}
           />
-          <Field
+          <BillingField
             label="Prix (centimes)"
             type="number"
             value={String(pack.priceCents)}
             onChange={(e) => onChange({ ...pack, priceCents: Number(e.target.value) })}
           />
-          <Field
+          <BillingField
             label="Crédits inclus"
             type="number"
             value={String(pack.includedCredits)}
@@ -118,6 +119,6 @@ export function PackEditor({
           </Button>
         </div>
       </div>
-    </Card>
+    </Card.Root>
   );
 }

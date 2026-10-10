@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Badge, Button, Card, Input } from "@krizaka/orazaka-design-system";
+import { Badge, Button, Input } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import { formatCredits, formatPrice, type Entitlement, type Plan } from "@krizaka/orazaka-shared";
-import { Field } from "./Field";
+import { BillingField } from "./BillingField";
 import { BillingAdminApi } from "@/services/billing.admin.api";
 
 /**
@@ -79,7 +80,7 @@ export function PlansScreen() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
-          <Card key={plan.planKey}>
+          <Card.Root key={plan.planKey} className="p-5">
             <article className="space-y-3">
               <header className="flex items-start justify-between">
                 <hgroup>
@@ -99,7 +100,7 @@ export function PlansScreen() {
                 Modifier
               </Button>
             </article>
-          </Card>
+          </Card.Root>
         ))}
       </div>
 
@@ -133,32 +134,32 @@ function PlanEditor({
   };
 
   return (
-    <Card>
+    <Card.Root className="p-5">
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field
+          <BillingField
             label="Clé"
             value={plan.planKey}
             onChange={(e) => onChange({ ...plan, planKey: e.target.value })}
           />
-          <Field
+          <BillingField
             label="Libellé"
             value={plan.label}
             onChange={(e) => onChange({ ...plan, label: e.target.value })}
           />
-          <Field
+          <BillingField
             label="Rang (ordonne les offres)"
             type="number"
             value={String(plan.tierRank)}
             onChange={(e) => onChange({ ...plan, tierRank: Number(e.target.value) })}
           />
-          <Field
+          <BillingField
             label="Prix (centimes)"
             type="number"
             value={String(plan.priceCents)}
             onChange={(e) => onChange({ ...plan, priceCents: Number(e.target.value) })}
           />
-          <Field
+          <BillingField
             label="Crédits / mois"
             type="number"
             value={String(plan.monthlyCreditGrant)}
@@ -166,7 +167,7 @@ function PlanEditor({
               onChange({ ...plan, monthlyCreditGrant: Number(e.target.value) })
             }
           />
-          <Field
+          <BillingField
             label="Palier de débit"
             value={plan.rateLimitTierKey}
             onChange={(e) => onChange({ ...plan, rateLimitTierKey: e.target.value })}
@@ -226,6 +227,6 @@ function PlanEditor({
           </Button>
         </div>
       </div>
-    </Card>
+    </Card.Root>
   );
 }

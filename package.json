@@ -10,11 +10,12 @@
     "validate": "depcruise src --config .dependency-cruiser.cjs && npm run lint"
   },
   "dependencies": {
+    "@krizaka/orazaka-design-system": "*",
+    "@krizaka/orazaka-shared": "*",
+    "@krizaka/ui": "^2.0.0",
     "date-fns": "^4.3.0",
     "next": "^16.3.0",
     "next-auth": "^4.24.15",
-    "@krizaka/orazaka-design-system": "*",
-    "@krizaka/orazaka-shared": "*",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "zod": "^3.25.67"

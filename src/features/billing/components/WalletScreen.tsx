@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card } from "@krizaka/orazaka-design-system";
+import { Button } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import { availableCredits, formatCredits, type CreditBucket, type Wallet } from "@krizaka/orazaka-shared";
-import { Field } from "./Field";
+import { BillingField } from "./BillingField";
 import { BillingAdminApi } from "@/services/billing.admin.api";
 
 /**
@@ -65,9 +66,9 @@ export function WalletScreen() {
         </p>
       </header>
 
-      <Card>
+      <Card.Root className="p-5">
         <div className="flex items-end gap-3">
-          <Field
+          <BillingField
             label="Identifiant de l’acteur"
             value={actorId}
             onChange={(e) => setActorId(e.target.value)}
@@ -76,23 +77,23 @@ export function WalletScreen() {
             Rechercher
           </Button>
         </div>
-      </Card>
+      </Card.Root>
 
       {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
       {notice && <p className="text-sm text-[var(--success)]">{notice}</p>}
 
       {wallet && (
         <>
-          <Card>
+          <Card.Root className="p-5">
             <div className="grid gap-4 sm:grid-cols-4">
               <Metric label="Disponible" value={availableCredits(wallet)} />
               <Metric label="Offerts" value={wallet.balanceGranted} />
               <Metric label="Achetés" value={wallet.balancePurchased} />
               <Metric label="Réservés" value={wallet.held} muted />
             </div>
-          </Card>
+          </Card.Root>
 
-          <Card>
+          <Card.Root className="p-5">
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                 Ajustement manuel
@@ -112,13 +113,13 @@ export function WalletScreen() {
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <Field
+                <BillingField
                   label="Montant (négatif pour reprendre)"
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                 />
-                <Field
+                <BillingField
                   label="Motif (obligatoire)"
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
@@ -131,7 +132,7 @@ export function WalletScreen() {
                 </Button>
               </div>
             </div>
-          </Card>
+          </Card.Root>
         </>
       )}
     </section>

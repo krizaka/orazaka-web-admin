@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Badge, Button, Card } from "@krizaka/orazaka-design-system";
+import { Badge, Button } from "@krizaka/orazaka-design-system";
+import { Card } from "@krizaka/ui/card";
 import { formatCredits, formatPrice, type Pack } from "@krizaka/orazaka-shared";
 import { PackEditor } from "./PackEditor";
 import { BillingAdminApi } from "@/services/billing.admin.api";
@@ -124,7 +125,7 @@ function PackTile({
   onWithdraw: (packKey: string) => void;
 }>) {
   return (
-    <Card>
+    <Card.Root className="p-5">
       <article className="space-y-3">
         <header className="flex items-start justify-between">
           <p className="font-medium text-[var(--text-primary)]">{pack.packKey}</p>
@@ -146,6 +147,6 @@ function PackTile({
           )}
         </div>
       </article>
-    </Card>
+    </Card.Root>
   );
 }
