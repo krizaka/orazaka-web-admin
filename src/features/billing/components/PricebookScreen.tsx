@@ -84,19 +84,19 @@ export function PricebookScreen() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-lg font-semibold text-[var(--text-primary)]">Grille tarifaire</h2>
-        <p className="text-sm text-[var(--text-muted)]">
+        <h2 className="text-lg font-semibold text-fg">Grille tarifaire</h2>
+        <p className="text-sm text-fg-muted">
           Une publication clôture le tarif courant et en ouvre une nouvelle version.
           Les réservations en cours restent facturées à la version qu’elles ont figée.
         </p>
       </header>
 
-      {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
+      {error && <p className="text-sm text-fg-danger">{error}</p>}
 
       <Card.Root>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-[var(--text-muted)]">
+            <tr className="text-left text-fg-muted">
               <th className="py-2">Capacité</th>
               <th>Modèle</th>
               <th>Unité</th>
@@ -110,16 +110,16 @@ export function PricebookScreen() {
             {rates.map((rate) => (
               <tr
                 key={`${rate.capability}:${rate.modelName ?? "*"}`}
-                className="border-t border-[var(--border-subtle)]"
+                className="border-t border-border-subtle"
               >
-                <td className="py-2 text-[var(--text-primary)]">{rate.capability}</td>
-                <td className="text-[var(--text-muted)]">{rate.modelName ?? "—"}</td>
-                <td className="text-[var(--text-muted)]">{rate.unit}</td>
-                <td className="text-right text-[var(--text-primary)]">{rate.creditsPerUnit}</td>
-                <td className="text-right text-[var(--text-primary)]">
+                <td className="py-2 text-fg">{rate.capability}</td>
+                <td className="text-fg-muted">{rate.modelName ?? "—"}</td>
+                <td className="text-fg-muted">{rate.unit}</td>
+                <td className="text-right text-fg">{rate.creditsPerUnit}</td>
+                <td className="text-right text-fg">
                   {formatCredits(rate.estimateCredits)}
                 </td>
-                <td className="text-right text-[var(--text-muted)]">{rate.version}</td>
+                <td className="text-right text-fg-muted">{rate.version}</td>
                 <td className="text-right">
                   <Button size="sm" variant="ghost" onClick={() => edit(rate)}>
                     Modifier
@@ -134,7 +134,7 @@ export function PricebookScreen() {
       {draft && (
         <Card.Root className="p-5">
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+            <h3 className="text-sm font-semibold text-fg">
               {draft.capability} · {draft.modelName ?? "défaut"}
             </h3>
 
@@ -202,17 +202,17 @@ function MarginPreviewPanel({ preview }: { preview: MarginPreview }) {
       : Math.round((delta / preview.currentCredits) * 10000) / 100;
 
   return (
-    <div className="rounded-lg border border-[var(--border-subtle)] p-4">
+    <div className="rounded-lg border border-border-subtle p-4">
       {!preview.sampleEvents ? (
-        <p className="text-sm text-[var(--warning)]">
+        <p className="text-sm text-fg-warning">
           Aucun trafic sur 30 jours — cette publication se fait sans données.
         </p>
       ) : (
         <div className="space-y-2 text-sm">
-          <p className="text-[var(--text-muted)]">
+          <p className="text-fg-muted">
             Sur <strong>{preview.sampleEvents}</strong> requêtes réelles :
           </p>
-          <p className="text-[var(--text-primary)]">
+          <p className="text-fg">
             {formatCredits(preview.currentCredits)} →{" "}
             {formatCredits(preview.proposedCredits)} crédits{" "}
             <Badge variant={delta >= 0 ? "success" : "warning"}>

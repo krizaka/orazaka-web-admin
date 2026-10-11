@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Tabs } from "@krizaka/ui/tabs";
 import { StudioBuilderScreen } from "@/features/studio/components/StudioBuilderScreen";
 import { StudioAnalyticsScreen } from "@/features/studio/components/StudioAnalyticsScreen";
 
@@ -16,32 +17,26 @@ export default function StudiosPage() {
   const [tab, setTab] = useState<"usage" | "builder">("usage");
 
   return (
-    <main className="mx-auto max-w-6xl space-y-8 px-6 py-10">
+    <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6">
       <header>
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Studios</h1>
-        <p className="text-sm text-[var(--text-muted)]">
+        <h1 className="font-display text-3xl font-bold tracking-tight text-fg">Studios</h1>
+        <p className="text-sm text-fg-muted">
           Un Studio est une donnée : le workflow, ses étapes et ses formulaires s’écrivent ici et se
           publient sans déploiement.
         </p>
       </header>
-      <div className="flex gap-2 border-b border-[var(--border-subtle)]">
-        <button
-          type="button"
-          onClick={() => setTab("usage")}
-          className={`h-8 px-3 text-sm ${tab === "usage" ? "font-semibold text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
-        >
-          Utilisation
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("builder")}
-          className={`h-8 px-3 text-sm ${tab === "builder" ? "font-semibold text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
-        >
-          Éditeur
-        </button>
-      </div>
-
-      {tab === "usage" ? <StudioAnalyticsScreen /> : <StudioBuilderScreen />}
+      <Tabs.Root value={tab} onValueChange={(value) => setTab(value as "usage" | "builder")}>
+        <Tabs.List aria-label="Studios">
+          <Tabs.Trigger value="usage">Utilisation</Tabs.Trigger>
+          <Tabs.Trigger value="builder">Éditeur</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="usage">
+          <StudioAnalyticsScreen />
+        </Tabs.Content>
+        <Tabs.Content value="builder">
+          <StudioBuilderScreen />
+        </Tabs.Content>
+      </Tabs.Root>
     </main>
   );
 }

@@ -118,10 +118,10 @@ export function ModelPricingScreen() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+        <h2 className="text-lg font-semibold text-fg">
           Tarification par modèle
         </h2>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-fg-muted">
           Un modèle sans tarif ni tarif par défaut est refusé à la réservation : la
           capacité cesse de fonctionner pour ce modèle. Les modèles non tarifés sont
           affichés en premier.
@@ -129,16 +129,16 @@ export function ModelPricingScreen() {
       </header>
 
       {unpriced > 0 && (
-        <p className="text-sm text-[var(--warning)]">
+        <p className="text-sm text-fg-warning">
           {unpriced} modèle(s) sans tarif — toute requête les utilisant sera refusée.
         </p>
       )}
-      {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
+      {error && <p className="text-sm text-fg-danger">{error}</p>}
 
       <Card.Root>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-[var(--text-muted)]">
+            <tr className="text-left text-fg-muted">
               <th className="py-2">Modèle</th>
               <th>Catégorie</th>
               <th>Capacité</th>
@@ -151,19 +151,19 @@ export function ModelPricingScreen() {
           </thead>
           <tbody>
             {rows.map(({ model, capability, own, fallback, priced }) => (
-              <tr key={model.modelName} className="border-t border-[var(--border-subtle)]">
-                <td className="py-2 text-[var(--text-primary)]">
+              <tr key={model.modelName} className="border-t border-border-subtle">
+                <td className="py-2 text-fg">
                   {model.modelLabel || model.modelName}
                 </td>
-                <td className="text-[var(--text-muted)]">{model.category}</td>
-                <td className="text-[var(--text-muted)]">{capability}</td>
-                <td className="text-[var(--text-muted)]">
+                <td className="text-fg-muted">{model.category}</td>
+                <td className="text-fg-muted">{capability}</td>
+                <td className="text-fg-muted">
                   {own?.unit ?? fallback?.unit ?? "—"}
                 </td>
-                <td className="text-right text-[var(--text-primary)]">
+                <td className="text-right text-fg">
                   {own?.creditsPerUnit ?? fallback?.creditsPerUnit ?? "—"}
                 </td>
-                <td className="text-right text-[var(--text-primary)]">
+                <td className="text-right text-fg">
                   {own?.estimateCredits ?? fallback?.estimateCredits ?? "—"}
                 </td>
                 <td>

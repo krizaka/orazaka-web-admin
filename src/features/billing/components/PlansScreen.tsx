@@ -50,8 +50,8 @@ export function PlansScreen() {
     <section className="space-y-6">
       <header className="flex items-start justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Offres</h2>
-          <p className="text-sm text-[var(--text-muted)]">
+          <h2 className="text-lg font-semibold text-fg">Offres</h2>
+          <p className="text-sm text-fg-muted">
             Prix, dotation mensuelle et matrice de droits. Une offre retirée reste
             visible ici : des abonnements y font encore référence.
           </p>
@@ -76,7 +76,7 @@ export function PlansScreen() {
         </Button>
       </header>
 
-      {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
+      {error && <p className="text-sm text-fg-danger">{error}</p>}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
@@ -84,16 +84,16 @@ export function PlansScreen() {
             <article className="space-y-3">
               <header className="flex items-start justify-between">
                 <hgroup>
-                  <p className="font-medium text-[var(--text-primary)]">{plan.label}</p>
-                  <p className="text-xs text-[var(--text-muted)]">{plan.planKey}</p>
+                  <p className="font-medium text-fg">{plan.label}</p>
+                  <p className="text-xs text-fg-muted">{plan.planKey}</p>
                 </hgroup>
                 {!plan.isActive && <Badge variant="warning">retirée</Badge>}
               </header>
-              <p className="text-sm text-[var(--text-primary)]">
+              <p className="text-sm text-fg">
                 {formatPrice(plan.priceCents, plan.currency)} ·{" "}
                 {formatCredits(plan.monthlyCreditGrant)} crédits / mois
               </p>
-              <p className="text-xs text-[var(--text-muted)]">
+              <p className="text-xs text-fg-muted">
                 {plan.entitlements.length} droits
               </p>
               <Button size="sm" variant="ghost" onClick={() => setEditing(plan)}>
@@ -175,7 +175,7 @@ function PlanEditor({
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium text-[var(--text-primary)]">Droits</p>
+          <p className="text-sm font-medium text-fg">Droits</p>
           {plan.entitlements.map((entitlement, index) => (
             <div key={index} className="grid gap-2 sm:grid-cols-3">
               <Input

@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@krizaka/ui/cn";
 import { useEffect, useState } from "react";
 import { StudioAdminApi } from "@/services/studio.admin.api";
 import { useStudioAdmin } from "@/features/studio/hooks/useStudioAdmin";
@@ -31,7 +32,7 @@ export function StudioBuilderScreen() {
   }, []);
 
   if (isLoading) {
-    return <p className="text-sm text-[var(--text-muted)]">Chargement du catalogue…</p>;
+    return <p className="text-sm text-fg-muted">Chargement du catalogue…</p>;
   }
 
   return (
@@ -42,25 +43,24 @@ export function StudioBuilderScreen() {
             key={studio.studioKey}
             type="button"
             onClick={() => select(studio.studioKey)}
-            className={`block w-full rounded px-3 py-2 text-left text-sm transition-colors ${
-              selected === studio.studioKey
-                ? "bg-[var(--surface-2)] font-semibold text-[var(--text-primary)]"
-                : "text-[var(--text-secondary)] hover:bg-[var(--surface-2)]"
-            }`}
+            className={cn(
+              "block w-full rounded px-3 py-2 text-left text-sm transition-colors",
+              selected === studio.studioKey ? "bg-surface-2 font-semibold text-fg" : "text-fg-secondary hover:bg-surface-2",
+            )}
           >
             {studio.label}
-            <span className="block font-mono text-[10px] text-[var(--text-muted)]">
+            <span className="block font-mono text-[10px] text-fg-muted">
               {studio.studioKey}
             </span>
           </button>
         ))}
         {studios.length === 0 && (
-          <p className="text-sm text-[var(--text-muted)]">Aucun Studio au catalogue.</p>
+          <p className="text-sm text-fg-muted">Aucun Studio au catalogue.</p>
         )}
       </nav>
 
       <div className="space-y-6">
-        {error && <p className="text-sm text-[var(--status-error)]">{error}</p>}
+        {error && <p className="text-sm text-fg-danger">{error}</p>}
 
         {selected && (
           <>

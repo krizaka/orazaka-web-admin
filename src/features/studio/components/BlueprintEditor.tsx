@@ -102,46 +102,46 @@ export function BlueprintEditor({ studioKey, featureKeys, onSaved }: Readonly<Bl
     <section className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-3">
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-[var(--text-muted)]">Version (semver)</span>
+          <span className="text-xs text-fg-muted">Version (semver)</span>
           <input
             value={version}
             onChange={(event) => setVersion(event.target.value)}
             placeholder="1.1.0"
             disabled={isBusy}
-            className="h-9 rounded border border-[var(--border-subtle)] bg-[var(--surface-2)] px-2 text-sm text-[var(--text-primary)] disabled:opacity-50"
+            className="h-9 rounded border border-border-subtle bg-surface-2 px-2 text-sm text-fg disabled:opacity-50"
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-[var(--text-muted)]">Crédits estimés / exécution</span>
+          <span className="text-xs text-fg-muted">Crédits estimés / exécution</span>
           <input
             value={estimatedCredits}
             onChange={(event) => setEstimatedCredits(event.target.value)}
             inputMode="numeric"
             disabled={isBusy}
-            className="h-9 rounded border border-[var(--border-subtle)] bg-[var(--surface-2)] px-2 text-sm text-[var(--text-primary)] disabled:opacity-50"
+            className="h-9 rounded border border-border-subtle bg-surface-2 px-2 text-sm text-fg disabled:opacity-50"
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-[var(--text-muted)]">Note de version</span>
+          <span className="text-xs text-fg-muted">Note de version</span>
           <input
             value={changelog}
             onChange={(event) => setChangelog(event.target.value)}
             placeholder="Ce qui change pour l'utilisateur"
             disabled={isBusy}
-            className="h-9 rounded border border-[var(--border-subtle)] bg-[var(--surface-2)] px-2 text-sm text-[var(--text-primary)] disabled:opacity-50"
+            className="h-9 rounded border border-border-subtle bg-surface-2 px-2 text-sm text-fg disabled:opacity-50"
           />
         </label>
       </div>
 
-      <details className="rounded border border-[var(--border-subtle)] p-3">
-        <summary className="cursor-pointer text-xs text-[var(--text-muted)]">
+      <details className="rounded border border-border-subtle p-3">
+        <summary className="cursor-pointer text-xs text-fg-muted">
           Capacités disponibles ({featureKeys.length}) — un step CAPABILITY doit en nommer une
         </summary>
         <ul className="mt-2 flex flex-wrap gap-1.5">
           {featureKeys.map((key) => (
             <li
               key={key}
-              className="rounded bg-[var(--surface-2)] px-2 py-0.5 font-mono text-[11px] text-[var(--text-secondary)]"
+              className="rounded bg-surface-2 px-2 py-0.5 font-mono text-[11px] text-fg-secondary"
             >
               {key}
             </li>
@@ -153,8 +153,8 @@ export function BlueprintEditor({ studioKey, featureKeys, onSaved }: Readonly<Bl
       <JsonField label="Schéma des entrées (formulaire d'exécution)" value={inputSchema} onChange={setInputSchema} disabled={isBusy} rows={8} />
       <JsonField label="Schéma de configuration (dialogue d'installation)" value={configSchema} onChange={setConfigSchema} disabled={isBusy} rows={6} />
 
-      {error && <p className="whitespace-pre-wrap text-sm text-[var(--status-error)]">{error}</p>}
-      {notice && <p className="text-sm text-[var(--status-success)]">{notice}</p>}
+      {error && <p className="whitespace-pre-wrap text-sm text-fg-danger">{error}</p>}
+      {notice && <p className="text-sm text-fg-success">{notice}</p>}
 
       <div className="flex gap-2">
         <Button onClick={() => void save()} disabled={!canAct}>
@@ -180,14 +180,14 @@ interface JsonFieldProps {
 function JsonField({ label, value, onChange, disabled, rows }: Readonly<JsonFieldProps>) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-xs text-[var(--text-muted)]">{label}</span>
+      <span className="text-xs text-fg-muted">{label}</span>
       <textarea
         value={value}
         rows={rows}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
         spellCheck={false}
-        className="rounded border border-[var(--border-subtle)] bg-[var(--surface-2)] p-2 font-mono text-[12px] leading-relaxed text-[var(--text-primary)] disabled:opacity-50"
+        className="rounded border border-border-subtle bg-surface-2 p-2 font-mono text-[12px] leading-relaxed text-fg disabled:opacity-50"
       />
     </label>
   );

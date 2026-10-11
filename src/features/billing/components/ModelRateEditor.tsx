@@ -38,10 +38,10 @@ export function ModelRateEditor({
     <Card.Root className="p-5">
       <article className="space-y-4">
         <header>
-          <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+          <h3 className="text-sm font-semibold text-fg">
             {draft.modelName}
           </h3>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-fg-muted">
             Facturé comme {draft.capability}. Une publication clôture le tarif courant
             et ouvre une nouvelle version.
             {draft.isReprice && !preview ? " Simulez sur 30 jours avant de publier." : ""}
@@ -50,11 +50,11 @@ export function ModelRateEditor({
 
         <fieldset className="grid gap-3 sm:grid-cols-2">
           <label className="block space-y-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-fg-secondary">
               Unité de mesure
             </span>
             <select
-              className="flex h-11 w-full rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-2)] px-3 text-sm text-[var(--text-primary)]"
+              className="flex h-11 w-full rounded-lg border border-border-subtle bg-surface-2 px-3 text-sm text-fg"
               value={draft.unit}
               onChange={(e) => update({ unit: e.target.value as BillableUnit })}
             >
@@ -87,7 +87,7 @@ export function ModelRateEditor({
         </fieldset>
 
         {preview && (
-          <p className="rounded-lg border border-[var(--border-subtle)] p-3 text-sm text-[var(--text-primary)]">
+          <p className="rounded-lg border border-border-subtle p-3 text-sm text-fg">
             {preview.sampleEvents === 0
               ? "Aucun trafic sur 30 jours — publication sans données."
               : `Sur ${preview.sampleEvents} requêtes : ${preview.currentCredits} → ${preview.proposedCredits} crédits.`}

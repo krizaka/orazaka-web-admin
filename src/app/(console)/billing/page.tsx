@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@krizaka/orazaka-design-system";
+import { Tabs } from "@krizaka/ui/tabs";
 import { PlansScreen } from "@/features/billing/components/PlansScreen";
 import { PacksScreen } from "@/features/billing/components/PacksScreen";
 import { ModelPricingScreen } from "@/features/billing/components/ModelPricingScreen";
@@ -31,35 +31,43 @@ export default function BillingPage() {
   const [tab, setTab] = useState<TabId>("usage");
 
   return (
-    <main className="mx-auto max-w-6xl space-y-8 px-6 py-10">
+    <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6">
       <header>
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
+        <h1 className="font-display text-3xl font-bold tracking-tight text-fg">
           Facturation &amp; crédits
         </h1>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-fg-muted">
           Tout ce qui est commercial vit en base et s’édite ici — jamais dans le code.
         </p>
       </header>
 
-      <nav className="flex gap-2 border-b border-[var(--border-subtle)] pb-2">
-        {TABS.map((entry) => (
-          <Button
-            key={entry.id}
-            size="sm"
-            variant={tab === entry.id ? "primary" : "ghost"}
-            onClick={() => setTab(entry.id)}
-          >
-            {entry.label}
-          </Button>
-        ))}
-      </nav>
-
-      {tab === "usage" && <UsageScreen />}
-      {tab === "models" && <ModelPricingScreen />}
-      {tab === "pricebook" && <PricebookScreen />}
-      {tab === "plans" && <PlansScreen />}
-      {tab === "packs" && <PacksScreen />}
-      {tab === "wallets" && <WalletScreen />}
+      <Tabs.Root value={tab} onValueChange={(value) => setTab(value as TabId)}>
+        <Tabs.List aria-label="Facturation" className="overflow-x-auto">
+          {TABS.map((entry) => (
+            <Tabs.Trigger key={entry.id} value={entry.id}>
+              {entry.label}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
+        <Tabs.Content value="usage">
+          <UsageScreen />
+        </Tabs.Content>
+        <Tabs.Content value="models">
+          <ModelPricingScreen />
+        </Tabs.Content>
+        <Tabs.Content value="pricebook">
+          <PricebookScreen />
+        </Tabs.Content>
+        <Tabs.Content value="plans">
+          <PlansScreen />
+        </Tabs.Content>
+        <Tabs.Content value="packs">
+          <PacksScreen />
+        </Tabs.Content>
+        <Tabs.Content value="wallets">
+          <WalletScreen />
+        </Tabs.Content>
+      </Tabs.Root>
     </main>
   );
 }

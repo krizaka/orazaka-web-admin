@@ -59,8 +59,8 @@ export function WalletScreen() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-lg font-semibold text-[var(--text-primary)]">Portefeuilles</h2>
-        <p className="text-sm text-[var(--text-muted)]">
+        <h2 className="text-lg font-semibold text-fg">Portefeuilles</h2>
+        <p className="text-sm text-fg-muted">
           Un ajustement est la seule écriture qui déplace des crédits sans réservation.
           Il est signé, motivé et attribué — et plafonné par jour et par administrateur.
         </p>
@@ -79,8 +79,8 @@ export function WalletScreen() {
         </div>
       </Card.Root>
 
-      {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
-      {notice && <p className="text-sm text-[var(--success)]">{notice}</p>}
+      {error && <p className="text-sm text-fg-danger">{error}</p>}
+      {notice && <p className="text-sm text-fg-success">{notice}</p>}
 
       {wallet && (
         <>
@@ -95,7 +95,7 @@ export function WalletScreen() {
 
           <Card.Root className="p-5">
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
+              <h3 className="text-sm font-semibold text-fg">
                 Ajustement manuel
               </h3>
 
@@ -150,12 +150,12 @@ function Metric({
 }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-fg-muted">{label}</p>
       <p
         className={
           muted
-            ? "text-lg text-[var(--text-muted)]"
-            : "text-lg font-semibold text-[var(--text-primary)]"
+            ? "text-lg text-fg-muted"
+            : "text-lg font-semibold text-fg"
         }
       >
         {formatCredits(value)}

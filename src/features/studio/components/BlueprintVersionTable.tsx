@@ -38,15 +38,15 @@ export function BlueprintVersionTable({
   };
 
   if (versions.length === 0) {
-    return <p className="text-sm text-[var(--text-muted)]">Aucune version pour ce Studio.</p>;
+    return <p className="text-sm text-fg-muted">Aucune version pour ce Studio.</p>;
   }
 
   return (
     <section className="space-y-2">
-      <h2 className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Versions</h2>
+      <h2 className="text-xs uppercase tracking-wide text-fg-muted">Versions</h2>
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-xs text-[var(--text-muted)]">
+          <tr className="text-left text-xs text-fg-muted">
             <th className="py-1">Version</th>
             <th>Statut</th>
             <th>Crédits</th>
@@ -56,21 +56,21 @@ export function BlueprintVersionTable({
         </thead>
         <tbody>
           {versions.map((version) => (
-            <tr key={version.version} className="border-t border-[var(--border-subtle)]">
+            <tr key={version.version} className="border-t border-border-subtle">
               <td className="py-2 font-mono text-[12px]">{version.version}</td>
               <td>
                 <span
                   className={
                     version.status === "PUBLISHED"
-                      ? "text-[var(--status-success)]"
-                      : "text-[var(--text-muted)]"
+                      ? "text-fg-success"
+                      : "text-fg-muted"
                   }
                 >
                   {version.status}
                 </span>
               </td>
               <td>{version.estimatedCredits}</td>
-              <td className="max-w-[280px] truncate text-[var(--text-secondary)]">
+              <td className="max-w-[280px] truncate text-fg-secondary">
                 {version.changelog ?? "—"}
               </td>
               <td className="space-x-2 text-right">
@@ -83,7 +83,7 @@ export function BlueprintVersionTable({
                         StudioAdminApi.publish(studioKey, version.version),
                       )
                     }
-                    className="text-xs text-[var(--accent)] disabled:opacity-50"
+                    className="text-xs text-accent disabled:opacity-50"
                   >
                     Publier
                   </button>
@@ -98,7 +98,7 @@ export function BlueprintVersionTable({
                         StudioAdminApi.deprecate(studioKey, version.version),
                       )
                     }
-                    className="text-xs text-[var(--text-muted)] disabled:opacity-50"
+                    className="text-xs text-fg-muted disabled:opacity-50"
                   >
                     Déprécier
                   </button>
@@ -108,7 +108,7 @@ export function BlueprintVersionTable({
           ))}
         </tbody>
       </table>
-      {error && <p className="whitespace-pre-wrap text-sm text-[var(--status-error)]">{error}</p>}
+      {error && <p className="whitespace-pre-wrap text-sm text-fg-danger">{error}</p>}
     </section>
   );
 }

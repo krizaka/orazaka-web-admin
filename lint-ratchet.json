@@ -1,0 +1,13 @@
+{
+  "globs": [
+    "app/**/*.tsx",
+    "components/**/*.tsx",
+    "src/**/*.tsx"
+  ],
+  "counters": {
+    "palette": 0,
+    "light": 0,
+    "arbitraryVar": 0,
+    "classNameTemplate": 0
+  }
+}
