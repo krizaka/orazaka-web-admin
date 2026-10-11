@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Badge, Button } from "@krizaka/orazaka-design-system";
 import { Card } from "@krizaka/ui/card";
-import { formatCredits, formatPrice, type Pack } from "@krizaka/orazaka-shared";
+import { formatCredits, type Pack } from "@krizaka/orazaka-shared";
+import { money } from "@/features/billing/utils/money";
 import { PackEditor } from "./PackEditor";
 import { BillingAdminApi } from "@/services/billing.admin.api";
 
@@ -132,7 +133,7 @@ function PackTile({
           {!pack.isActive && <Badge variant="warning">retiré</Badge>}
         </header>
         <p className="text-sm text-fg">
-          {formatPrice(pack.priceCents, "EUR")} · {formatCredits(pack.includedCredits)} crédits
+          {money(pack.priceCents)} · {formatCredits(pack.includedCredits)} crédits
           inclus
         </p>
         <p className="text-xs text-fg-muted">{pack.entitlements.length} droits</p>

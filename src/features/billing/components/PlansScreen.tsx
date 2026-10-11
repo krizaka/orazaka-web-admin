@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Badge, Button, Input } from "@krizaka/orazaka-design-system";
 import { Card } from "@krizaka/ui/card";
-import { formatCredits, formatPrice, type Entitlement, type Plan } from "@krizaka/orazaka-shared";
+import { formatCredits, type Entitlement, type Plan } from "@krizaka/orazaka-shared";
+import { BILLING_CURRENCY, money } from "@/features/billing/utils/money";
 import { BillingField } from "./BillingField";
 import { BillingAdminApi } from "@/services/billing.admin.api";
 
@@ -64,7 +65,7 @@ export function PlansScreen() {
               tierRank: plans.length * 10 + 10,
               monthlyCreditGrant: 0,
               priceCents: 0,
-              currency: "EUR",
+              currency: BILLING_CURRENCY,
               rateLimitTierKey: "default",
               isPublic: true,
               isActive: true,
@@ -90,7 +91,7 @@ export function PlansScreen() {
                 {!plan.isActive && <Badge variant="warning">retirée</Badge>}
               </header>
               <p className="text-sm text-fg">
-                {formatPrice(plan.priceCents, plan.currency)} ·{" "}
+                {money(plan.priceCents, plan.currency)} ·{" "}
                 {formatCredits(plan.monthlyCreditGrant)} crédits / mois
               </p>
               <p className="text-xs text-fg-muted">
@@ -154,7 +155,7 @@ function PlanEditor({
             onChange={(e) => onChange({ ...plan, tierRank: Number(e.target.value) })}
           />
           <BillingField
-            label="Prix (centimes)"
+            label={`Prix (centimes, ${plan.currency || BILLING_CURRENCY})`}
             type="number"
             value={String(plan.priceCents)}
             onChange={(e) => onChange({ ...plan, priceCents: Number(e.target.value) })}

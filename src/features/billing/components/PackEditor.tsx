@@ -4,6 +4,7 @@ import { Button, Input } from "@krizaka/orazaka-design-system";
 import { Card } from "@krizaka/ui/card";
 import { type Entitlement, type Pack } from "@krizaka/orazaka-shared";
 import { BillingField } from "./BillingField";
+import { BILLING_CURRENCY } from "@/features/billing/utils/money";
 
 /**
  * The pack form — the **price tag**, which is all billing owns since ADR-036.
@@ -45,7 +46,7 @@ export function PackEditor({
             onChange={(e) => onChange({ ...pack, packKey: e.target.value })}
           />
           <BillingField
-            label="Prix (centimes)"
+            label={`Prix (centimes, ${BILLING_CURRENCY})`}
             type="number"
             value={String(pack.priceCents)}
             onChange={(e) => onChange({ ...pack, priceCents: Number(e.target.value) })}
