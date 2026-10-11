@@ -58,15 +58,15 @@ export function PackEditor({
           />
         </div>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-fg-muted">
           Le nom, la catégorie et l’icône du pack vivent dans le catalogue (contexte Studio), pas
           ici : la facturation répond « combien », le catalogue répond « qu’est-ce que c’est ».
           L’éditeur de catalogue arrive en phase 4.
         </p>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium text-[var(--text-primary)]">Droits</p>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-sm font-medium text-fg">Droits</p>
+          <p className="text-xs text-fg-muted">
             Une clé <code>studio.&lt;clé&gt;</code> débloque le Studio du même nom. Ces droits
             s’ajoutent à ceux de l’offre de l’acheteur — ils n’en retirent jamais. Un Studio ajouté
             au pack sans son droit ici fait échouer le build (PACK-001) : l’acheteur paierait et

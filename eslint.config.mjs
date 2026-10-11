@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import { krizakaUiRestrictedSyntax } from "@krizaka/config/eslint/krizaka-ui";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -20,6 +21,9 @@ const eslintConfig = defineConfig([
 
       "no-restricted-syntax": [
         "error",
+        // 0. The four Krizaka UI rules (@krizaka/config), strict: no raw palette colour, no `light:`, no arbitrary
+        //    `[var(--…)]` utility, no template string in className. krizaka-ratchet holds the same four at zero.
+        ...krizakaUiRestrictedSyntax(),
         // 1. Orazaka Invariant: Banning traditional TS Enums
         {
           selector: "TSEnumDeclaration",
@@ -110,6 +114,11 @@ const eslintConfig = defineConfig([
         { max: 250, skipBlankLines: false, skipComments: false },
       ],
     },
+  },
+  {
+    // Node's test runner reads the sources with their real path: the `@/*` alias is a bundler's, not Node's.
+    files: ["test/**/*.mts"],
+    rules: { "no-restricted-imports": "off" },
   },
   // Align globally ignored build directories
   globalIgnores([

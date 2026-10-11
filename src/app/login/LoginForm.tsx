@@ -1,0 +1,85 @@
+"use client";
+
+import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { OrazakaLogo } from "@krizaka/ui";
+import { Alert } from "@krizaka/ui/alert";
+import { Button } from "@krizaka/ui/button";
+import { Card } from "@krizaka/ui/card";
+import { Field, Input } from "@krizaka/ui/field";
+import { Mascot } from "@krizaka/ui/mascots";
+import { consoleCopy } from "@/core/copy/console";
+
+/** Only a path of this console: never an absolute URL a crafted link could send the operator to. */
+function safeCallback(value: string | null): string {
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/";
+}
+
+/**
+ * The operator's sign-in: email and password, checked by the identity service through next-auth's credentials
+ * provider, which also refuses an account without the administrator role. The falcon keeps watch — the console is the
+ * platform's security post. Inputs lock while the request runs.
+ */
+export function LoginForm() {
+  const copy = consoleCopy.login;
+  const router = useRouter();
+  const params = useSearchParams();
+  const [pending, setPending] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const onSubmit: React.SubmitEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    setPending(true);
+    setError(null);
+    try {
+      const result = await signIn("credentials", {
+        email: String(form.get("email") ?? ""),
+        password: String(form.get("password") ?? ""),
+        redirect: false,
+      });
+      if (result?.ok) {
+        router.replace(safeCallback(params.get("callbackUrl")));
+        router.refresh();
+        return;
+      }
+      setError(copy.refused);
+    } catch {
+      setError(copy.unreachable);
+    }
+    setPending(false);
+  };
+
+  return (
+    <Card.Root className="w-full max-w-md">
+      <Card.Body padding="lg" className="gap-6">
+        <header className="flex items-center gap-4">
+          <Mascot bird="falcon" mood={error ? "error" : "welcome"} size={72} />
+          <section className="flex flex-col gap-1">
+            <span className="flex items-center gap-2 text-sm font-semibold text-fg-secondary">
+              <OrazakaLogo size={18} />
+              {consoleCopy.product} {consoleCopy.console}
+            </span>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-fg">{copy.title}</h1>
+          </section>
+        </header>
+        <p className="text-sm text-fg-secondary">{copy.lead}</p>
+        {error && <Alert tone="danger">{error}</Alert>}
+        <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+          <Field.Root>
+            <Field.Label htmlFor="login-email">{copy.email}</Field.Label>
+            <Input id="login-email" name="email" type="email" autoComplete="username" required disabled={pending} invalid={Boolean(error)} />
+          </Field.Root>
+          <Field.Root>
+            <Field.Label htmlFor="login-password">{copy.password}</Field.Label>
+            <Input id="login-password" name="password" type="password" autoComplete="current-password" required disabled={pending} invalid={Boolean(error)} />
+          </Field.Root>
+          <Button type="submit" variant="primary" loading={pending} className="mt-2 w-full">
+            {copy.submit}
+          </Button>
+        </form>
+      </Card.Body>
+    </Card.Root>
+  );
+}

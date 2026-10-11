@@ -14,6 +14,7 @@
 
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { SESSION_COOKIE } from "@/core/auth/session-cookie";
 
 const ADMIN_AUTHORITY = "ROLE_ADMIN";
 
@@ -64,6 +65,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
+  cookies: {
+    sessionToken: {
+      name: SESSION_COOKIE,
+      options: { httpOnly: true, sameSite: "lax", path: "/", secure: process.env.NODE_ENV === "production" },
+    },
+  },
   pages: { signIn: "/login" },
   callbacks: {
     async jwt({ token, user }) {

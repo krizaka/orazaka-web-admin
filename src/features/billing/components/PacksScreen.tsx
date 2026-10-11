@@ -76,8 +76,8 @@ export function PacksScreen() {
     <section className="space-y-6">
       <header className="flex items-start justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-[var(--text-primary)]">Packs métier</h2>
-          <p className="text-sm text-[var(--text-muted)]">
+          <h2 className="text-lg font-semibold text-fg">Packs métier</h2>
+          <p className="text-sm text-fg-muted">
             Le prix et les droits d’un bundle acheté en plus d’une offre. Son nom, sa catégorie et
             son icône vivent dans le catalogue (contexte Studio). Un pack retiré reste acquis à ceux
             qui l’ont acheté.
@@ -86,10 +86,10 @@ export function PacksScreen() {
         <Button onClick={() => setEditing(blankPack())}>Nouveau pack</Button>
       </header>
 
-      {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
+      {error && <p className="text-sm text-fg-danger">{error}</p>}
 
       {packs.length === 0 ? (
-        <p className="text-xs text-[var(--text-muted)]">Aucun pack tarifé.</p>
+        <p className="text-xs text-fg-muted">Aucun pack tarifé.</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {packs.map((pack) => (
@@ -128,14 +128,14 @@ function PackTile({
     <Card.Root className="p-5">
       <article className="space-y-3">
         <header className="flex items-start justify-between">
-          <p className="font-medium text-[var(--text-primary)]">{pack.packKey}</p>
+          <p className="font-medium text-fg">{pack.packKey}</p>
           {!pack.isActive && <Badge variant="warning">retiré</Badge>}
         </header>
-        <p className="text-sm text-[var(--text-primary)]">
+        <p className="text-sm text-fg">
           {formatPrice(pack.priceCents, "EUR")} · {formatCredits(pack.includedCredits)} crédits
           inclus
         </p>
-        <p className="text-xs text-[var(--text-muted)]">{pack.entitlements.length} droits</p>
+        <p className="text-xs text-fg-muted">{pack.entitlements.length} droits</p>
         <div className="flex gap-2">
           <Button size="sm" variant="ghost" onClick={() => onEdit(pack)}>
             Modifier

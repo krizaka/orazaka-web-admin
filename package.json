@@ -6,13 +6,17 @@
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
-    "lint": "eslint",
-    "validate": "depcruise src --config .dependency-cruiser.cjs && npm run lint"
+    "lint": "eslint && krizaka-ratchet",
+    "validate": "depcruise src --config .dependency-cruiser.cjs && npm run lint && npm test",
+    "test": "node --test test/*.test.mts"
   },
   "dependencies": {
+    "@krizaka/charts": "^0.1.0",
+    "@krizaka/icons": "^0.1.0",
     "@krizaka/orazaka-design-system": "*",
     "@krizaka/orazaka-shared": "*",
-    "@krizaka/ui": "^2.0.0",
+    "@krizaka/tailwind": "^2.4.0",
+    "@krizaka/ui": "^2.4.0",
     "date-fns": "^4.3.0",
     "next": "^16.3.0",
     "next-auth": "^4.24.15",
@@ -21,6 +25,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "@krizaka/config": "^0.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

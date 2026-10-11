@@ -8,6 +8,7 @@
    ═══════════════════════════════════════════════════ */
 
 @import "tailwindcss";
+@import "@krizaka/ui/tailwind.css";
 @import "@krizaka/orazaka-design-system/theme.css";
 
 * {

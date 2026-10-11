@@ -31,16 +31,16 @@ export function StudioAnalyticsScreen() {
   }, []);
 
   if (isLoading) {
-    return <p className="text-sm text-[var(--text-muted)]">Chargement…</p>;
+    return <p className="text-sm text-fg-muted">Chargement…</p>;
   }
   if (error) {
-    return <p className="text-sm text-[var(--status-error)]">{error}</p>;
+    return <p className="text-sm text-fg-danger">{error}</p>;
   }
 
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="text-left text-xs text-[var(--text-muted)]">
+        <tr className="text-left text-xs text-fg-muted">
           <th className="py-1">Studio</th>
           <th>Installations</th>
           <th>Exécutions</th>
@@ -68,10 +68,10 @@ function StudioAnalyticsRow({ row }: Readonly<StudioAnalyticsRowProps>) {
   const healthy = row.runs > 0 && row.successRate >= 0.5;
 
   return (
-    <tr className="border-t border-[var(--border-subtle)]">
+    <tr className="border-t border-border-subtle">
       <td className="py-2">
         {row.label}
-        <span className="block font-mono text-[10px] text-[var(--text-muted)]">
+        <span className="block font-mono text-[10px] text-fg-muted">
           {row.studioKey}
         </span>
       </td>
@@ -79,10 +79,10 @@ function StudioAnalyticsRow({ row }: Readonly<StudioAnalyticsRowProps>) {
       <td>
         {row.runs}
         {row.failed > 0 && (
-          <span className="text-[var(--status-error)]"> ({row.failed} échecs)</span>
+          <span className="text-fg-danger"> ({row.failed} échecs)</span>
         )}
       </td>
-      <td className={healthy ? "text-[var(--status-success)]" : "text-[var(--text-muted)]"}>
+      <td className={healthy ? "text-fg-success" : "text-fg-muted"}>
         {row.runs === 0 ? "—" : `${Math.round(row.successRate * 100)} %`}
       </td>
       <td>{row.estimatedCredits}</td>
@@ -90,7 +90,7 @@ function StudioAnalyticsRow({ row }: Readonly<StudioAnalyticsRowProps>) {
         {row.installedButUnused && (
           <span
             title="Installé puis jamais lancé — le signal de churn le plus net du produit"
-            className="text-[11px] text-[var(--status-warning)]"
+            className="text-[11px] text-fg-warning"
           >
             installé, jamais lancé
           </span>
