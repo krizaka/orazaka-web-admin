@@ -40,6 +40,10 @@ updates:
       # types of the Node LTS we run, never a non-LTS line
       - dependency-name: "@types/node"
         versions: [">=26"]
+      # pinned for the whole UI workspace by the overrides of krizaka/orazaka (orazaka-apps/ui); bumped there, together
+      - dependency-name: "react"
+      # same as react
+      - dependency-name: "react-dom"
     commit-message:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
