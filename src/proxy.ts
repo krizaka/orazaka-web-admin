@@ -9,17 +9,24 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE } from "@/core/auth/session-cookie";
+import { readAuthFlags } from "@/core/config/auth-flags";
+import { gate } from "@/core/config/gate";
 
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
-  if (pathname === "/login") return NextResponse.next();
-  if (request.cookies.has(SESSION_COOKIE) || request.cookies.has(`__Secure-${SESSION_COOKIE}`)) return NextResponse.next();
+  const hasSession = request.cookies.has(SESSION_COOKIE) || request.cookies.has(`__Secure-${SESSION_COOKIE}`);
+  // The decision is pure (core/config/gate.ts): a closed site (AUTH_LOGIN_ENABLED false) answers 404 on the BFF routes.
+  const decision = gate(pathname, hasSession, readAuthFlags());
+  if (decision === "not-found") {
+    return NextResponse.json({ error: "Orazaka Operations is in development — sign-in is closed on this site" }, { status: 404 });
+  }
+  if (decision === "pass") return NextResponse.next();
   const login = new URL("/login", request.url);
   if (pathname !== "/") login.searchParams.set("callbackUrl", `${pathname}${search}`);
   return NextResponse.redirect(login);
 }
 
 export const config = {
-  /** Pages only: the BFF (`/api/**`) answers 401 itself, Next.js internals and static files pass. */
-  matcher: ["/((?!api/|_next/static|_next/image|_next/data|favicon).*)"],
+  /** Pages and BFF routes (a closed site answers 404 there); Next.js internals and static files pass. */
+  matcher: ["/((?!_next/static|_next/image|_next/data|favicon|robots.txt).*)"],
 };

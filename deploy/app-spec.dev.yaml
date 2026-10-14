@@ -1,0 +1,26 @@
+# Orazaka admin console — public DEVELOPMENT site (DigitalOcean App Platform, project "orazaka"), front only:
+# sign-in closed (AUTH_LOGIN_ENABLED=false), no backend call, no edge URL.
+# Create once:  doctl apps create --spec deploy/app-spec.dev.yaml --project-id 8983a916-6077-4b70-a665-b1177d7972b5
+name: orazaka-admin-dev
+region: tor
+domains:
+  - domain: admin.orazaka.com
+    type: PRIMARY
+services:
+  - name: web
+    github:
+      repo: krizaka/orazaka-web-admin
+      branch: main
+      deploy_on_push: true
+    environment_slug: node-js
+    build_command: npm install --no-audit --no-fund && npm run build
+    run_command: npm start
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    envs:
+      - { key: AUTH_LOGIN_ENABLED, scope: RUN_AND_BUILD_TIME, value: "false" }
+      - { key: AUTH_SIGNUP_ENABLED, scope: RUN_AND_BUILD_TIME, value: "false" }
+      - { key: NODE_ENV, scope: RUN_TIME, value: production }
+    routes:
+      - path: /
