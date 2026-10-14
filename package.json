@@ -17,6 +17,7 @@
     "@krizaka/orazaka-design-system": "*",
     "@krizaka/orazaka-shared": "*",
     "@krizaka/tailwind": "^3.10.0",
+    "@krizaka/tokens": "^3.10.0",
     "@krizaka/ui": "^3.10.0",
     "date-fns": "^4.3.0",
     "next": "^16.3.0",
@@ -36,5 +37,10 @@
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
     "typescript": "^6"
+  },
+  "overrides": {
+    "@krizaka/ui": "$@krizaka/ui",
+    "@krizaka/tokens": "$@krizaka/tokens",
+    "@krizaka/tailwind": "$@krizaka/tailwind"
   }
 }

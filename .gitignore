@@ -39,3 +39,6 @@ next-env.d.ts
 *.log
 var/
 scratch/
+
+# The lockfile belongs to the Orazaka workspace (orazaka-apps/ui), not to this repository.
+package-lock.json
