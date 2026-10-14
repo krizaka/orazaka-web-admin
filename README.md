@@ -64,3 +64,10 @@ in the workspace is normative; the local [AGENTS.md](AGENTS.md) only scopes it t
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+## Public development site (admin.orazaka.com)
+
+Front only: `AUTH_LOGIN_ENABLED` / `AUTH_SIGNUP_ENABLED` (default `false`) keep the sign-in closed — `/login` shows a
+calm notice (en/fr), the BFF routes (`/api/v1`, `/api/auth`) answer 404 and nothing calls the backend, so it builds and
+runs without an edge URL. `APP_VERSION` (package.json + short sha) and "A Krizaka product" are in the footer; the site is
+`noindex`. Deployed by `deploy/app-spec.dev.yaml` (DO App Platform, project orazaka).
