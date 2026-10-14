@@ -11,6 +11,14 @@ import { Field, Input } from "@krizaka/ui/field";
 import { Mascot } from "@krizaka/ui/mascots";
 import { consoleCopy } from "@/core/copy/console";
 
+/** The closed site's variant: the same screen disabled, under a calm banner that points at the public demo. */
+export interface ClosedPreview {
+  banner: string;
+  link: string;
+  href: string;
+  locale: string;
+}
+
 /** Only a path of this console: never an absolute URL a crafted link could send the operator to. */
 function safeCallback(value: string | null): string {
   return value && value.startsWith("/") && !value.startsWith("//") ? value : "/";
@@ -21,7 +29,7 @@ function safeCallback(value: string | null): string {
  * provider, which also refuses an account without the administrator role. The falcon keeps watch — the console is the
  * platform's security post. Inputs lock while the request runs.
  */
-export function LoginForm() {
+export function LoginForm({ preview }: Readonly<{ preview?: ClosedPreview }>) {
   const copy = consoleCopy.login;
   const router = useRouter();
   const params = useSearchParams();
@@ -30,6 +38,7 @@ export function LoginForm() {
 
   const onSubmit: React.SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+    if (preview) return;
     const form = new FormData(event.currentTarget);
     setPending(true);
     setError(null);
@@ -65,17 +74,23 @@ export function LoginForm() {
           </section>
         </header>
         <p className="text-sm text-fg-secondary">{copy.lead}</p>
+        {preview && (
+          <Alert tone="info" role="status">
+            <span lang={preview.locale}>{preview.banner}</span>{" "}
+            <a href={preview.href} className="font-medium underline underline-offset-4">{preview.link}</a>
+          </Alert>
+        )}
         {error && <Alert tone="danger">{error}</Alert>}
         <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
           <Field.Root>
             <Field.Label htmlFor="login-email">{copy.email}</Field.Label>
-            <Input id="login-email" name="email" type="email" autoComplete="username" required disabled={pending} invalid={Boolean(error)} />
+            <Input id="login-email" name="email" type="email" autoComplete="username" required disabled={pending || Boolean(preview)} invalid={Boolean(error)} />
           </Field.Root>
           <Field.Root>
             <Field.Label htmlFor="login-password">{copy.password}</Field.Label>
-            <Input id="login-password" name="password" type="password" autoComplete="current-password" required disabled={pending} invalid={Boolean(error)} />
+            <Input id="login-password" name="password" type="password" autoComplete="current-password" required disabled={pending || Boolean(preview)} invalid={Boolean(error)} />
           </Field.Root>
-          <Button type="submit" variant="primary" loading={pending} className="mt-2 w-full">
+          <Button type="submit" variant="primary" loading={pending} disabled={Boolean(preview)} className="mt-2 w-full">
             {copy.submit}
           </Button>
         </form>

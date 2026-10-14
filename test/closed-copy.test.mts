@@ -14,3 +14,19 @@ test("both languages say the same things", () => {
   assert.deepEqual(Object.keys(closedCopy.en), Object.keys(closedCopy.fr));
   for (const lang of ["en", "fr"] as const) for (const v of Object.values(closedCopy[lang])) assert.ok(v.length > 0);
 });
+
+test("the disabled sign-in says when it opens, in both languages", () => {
+  assert.notEqual(closedCopy.en.signInBanner, closedCopy.fr.signInBanner);
+  assert.match(closedCopy.en.signInBanner, /dev services/);
+});
+
+test("a closed login shows the real form disabled, not only a notice", async () => {
+  const { readFileSync } = await import("node:fs");
+  const page = readFileSync(new URL("../src/app/login/page.tsx", import.meta.url), "utf8");
+  const form = readFileSync(new URL("../src/app/login/LoginForm.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(page, /LoginClosed/);
+  assert.match(page, /<LoginForm preview=/);
+  assert.match(form, /disabled=\{pending \|\| Boolean\(preview\)\}/);
+  // The preview never reaches next-auth: submitting is a no-op.
+  assert.match(form, /if \(preview\) return;/);
+});
