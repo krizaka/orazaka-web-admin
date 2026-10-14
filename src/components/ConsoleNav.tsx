@@ -9,6 +9,7 @@ import { NavBar } from "@krizaka/ui/nav-bar";
 import { ThemeToggle } from "@krizaka/ui/theme";
 import { LogoutIcon } from "@krizaka/icons";
 import { consoleCopy } from "@/core/copy/console";
+import { APP_ENV } from "@/core/config/version";
 
 const SECTIONS = [
   { href: "/", label: consoleCopy.nav.supervision },
@@ -18,7 +19,8 @@ const SECTIONS = [
 
 /**
  * The console's bar (@krizaka/ui NavBar, full width): the Orazaka mark, its three sections with the light gliding to
- * the current one, the theme toggle and sign-out; a disclosure panel below `md`.
+ * the current one, the environment badge (DEV), the theme toggle and sign-out; a disclosure panel below `md`. A private
+ * console: no family switcher (NavBar.Family) and no family footer — they are for the public sites.
  */
 export function ConsoleNav() {
   const pathname = usePathname();
@@ -36,6 +38,8 @@ export function ConsoleNav() {
             </span>
           </Link>
         </NavBar.Brand>
+        {/* NAV-SYS: a private console shows the environment (DEV) and never the family panel. */}
+        {APP_ENV !== "production" && <NavBar.Badge env={APP_ENV} />}
         <NavBar.Items>
           {SECTIONS.map((section) => (
             <NavBar.Link key={section.href} asChild active={active(section.href)}>
