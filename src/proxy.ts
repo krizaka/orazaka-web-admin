@@ -10,9 +10,26 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SESSION_COOKIE } from "@/core/auth/session-cookie";
 import { readAuthFlags } from "@/core/config/auth-flags";
+import { SECURITY_HEADERS } from "@/core/config/security-headers";
 import { gate } from "@/core/config/gate";
+import { clientIp, ipAllowed, parseAllowList } from "@/core/config/ip-allow";
+
+/** Every answer of the console carries the security headers (no framing, no sniffing, HTTPS only). */
+function secured(response: NextResponse): NextResponse {
+  for (const h of SECURITY_HEADERS) response.headers.set(h.key, h.value);
+  return response;
+}
 
 export function proxy(request: NextRequest) {
+  return secured(decide(request));
+}
+
+function decide(request: NextRequest): NextResponse {
+  // Network gate first: any other client address gets 403 — sign-in page included (robots.txt is outside the matcher).
+  const production = process.env.NODE_ENV === "production";
+  if (!ipAllowed(clientIp(request.headers, production), parseAllowList(process.env.AUTH_ALLOWED_IPS), production)) {
+    return new NextResponse("Forbidden", { status: 403 });
+  }
   const { pathname, search } = request.nextUrl;
   const hasSession = request.cookies.has(SESSION_COOKIE) || request.cookies.has(`__Secure-${SESSION_COOKIE}`);
   // The decision is pure (core/config/gate.ts): a closed site (AUTH_LOGIN_ENABLED false) answers 404 on the BFF routes.

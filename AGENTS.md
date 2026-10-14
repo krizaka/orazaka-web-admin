@@ -37,3 +37,7 @@ The contract is defined once, in krizaka-com `AGENTS.md` §2.4, and checked here
 the same dependency-free file in every site's repository — keep the copies identical; its unit test sits beside it).
 
 admin.orazaka.com is an operator console and is **never indexed**: `src/app/robots.ts` (`Disallow: /`), `X-Robots-Tag: noindex, nofollow` on every response (`next.config.ts`) and the robots meta. It has no sitemap and no llms.txt (`check-seo-family.mjs --console`). Tests: `test/seo.test.mts`.
+
+## Network gate
+
+Only the addresses in `AUTH_ALLOWED_IPS` (comma-separated, read from DigitalOcean's `do-connecting-ip`) reach the console, sign-in page included (`src/core/config/ip-allow.ts`, applied first by `src/proxy.ts`). In production an empty list lets nobody in; `robots.txt` stays reachable. Tests: `test/ip-allow.test.mts`.

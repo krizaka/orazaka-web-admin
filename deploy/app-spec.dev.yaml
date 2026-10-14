@@ -22,5 +22,7 @@ services:
       - { key: AUTH_LOGIN_ENABLED, scope: RUN_AND_BUILD_TIME, value: "false" }
       - { key: AUTH_SIGNUP_ENABLED, scope: RUN_AND_BUILD_TIME, value: "false" }
       - { key: NODE_ENV, scope: RUN_TIME, value: production }
+      # Only these client addresses (do-connecting-ip) reach the console, sign-in page included; empty = nobody.
+      - { key: AUTH_ALLOWED_IPS, scope: RUN_TIME, value: "142.122.41.109" }
     routes:
       - path: /

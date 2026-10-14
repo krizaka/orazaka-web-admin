@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
   },
+  poweredByHeader: false,
   reactStrictMode: true,
   transpilePackages: ["@krizaka/orazaka-design-system", "@krizaka/orazaka-shared", "@krizaka/ui", "@krizaka/icons", "@krizaka/intl"],
   turbopack: {
