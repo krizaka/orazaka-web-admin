@@ -16,10 +16,8 @@ export default async function LoginPage() {
   const open = readAuthFlags().login;
   const locale = pickLocale((await headers()).get("accept-language"));
   return (
-    <main className="grid min-h-screen place-items-center bg-surface-0 px-4 py-10">
-      <Suspense fallback={null}>
-        <LoginForm preview={open ? undefined : { banner: closedCopy[locale].signInBanner, link: closedCopy[locale].home, href: "https://dev.orazaka.com", locale }} />
-      </Suspense>
-    </main>
+    <Suspense fallback={null}>
+      <LoginForm preview={open ? undefined : { banner: closedCopy[locale].signInBanner, link: closedCopy[locale].home, href: "https://dev.orazaka.com", locale }} />
+    </Suspense>
   );
 }

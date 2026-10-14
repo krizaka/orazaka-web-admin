@@ -6,9 +6,8 @@ import { signIn } from "next-auth/react";
 import { OrazakaLogo } from "@krizaka/ui";
 import { Alert } from "@krizaka/ui/alert";
 import { Button } from "@krizaka/ui/button";
-import { Card } from "@krizaka/ui/card";
+import { AuthLayout } from "@krizaka/ui/auth-layout";
 import { Field, Input } from "@krizaka/ui/field";
-import { Mascot } from "@krizaka/ui/mascots";
 import { consoleCopy } from "@/core/copy/console";
 
 /** The closed site's variant: the same screen disabled, under a calm banner that points at the public demo. */
@@ -26,8 +25,7 @@ function safeCallback(value: string | null): string {
 
 /**
  * The operator's sign-in: email and password, checked by the identity service through next-auth's credentials
- * provider, which also refuses an account without the administrator role. The falcon keeps watch — the console is the
- * platform's security post. Inputs lock while the request runs.
+ * provider, which also refuses an account without the administrator role. Inputs lock while the request runs.
  */
 export function LoginForm({ preview }: Readonly<{ preview?: ClosedPreview }>) {
   const copy = consoleCopy.login;
@@ -61,19 +59,24 @@ export function LoginForm({ preview }: Readonly<{ preview?: ClosedPreview }>) {
   };
 
   return (
-    <Card.Root className="w-full max-w-md">
-      <Card.Body padding="lg" className="gap-6">
-        <header className="flex items-center gap-4">
-          <Mascot bird="falcon" mood={error ? "error" : "welcome"} size={72} />
-          <section className="flex flex-col gap-1">
-            <span className="flex items-center gap-2 text-sm font-semibold text-fg-secondary">
-              <OrazakaLogo size={18} />
-              {consoleCopy.product} {consoleCopy.console}
-            </span>
-            <h1 className="font-display text-2xl font-bold tracking-tight text-fg">{copy.title}</h1>
-          </section>
-        </header>
-        <p className="text-sm text-fg-secondary">{copy.lead}</p>
+    <div className="brand-orazaka">
+      <AuthLayout
+        brand={
+          <>
+            <OrazakaLogo size={28} animated={false} /> {consoleCopy.product} {consoleCopy.console}
+          </>
+        }
+        promise={copy.title}
+        aside={
+          <div className="flex flex-col gap-6">
+            <OrazakaLogo size={112} />
+            <p>{copy.lead}</p>
+          </div>
+        }
+        asideFooter={<>© {new Date().getFullYear()} Orazaka · {consoleCopy.product} {consoleCopy.console}</>}
+        title={copy.title}
+        description={copy.lead}
+      >
         {preview && (
           <Alert tone="info" role="status">
             <span lang={preview.locale}>{preview.banner}</span>{" "}
@@ -90,11 +93,11 @@ export function LoginForm({ preview }: Readonly<{ preview?: ClosedPreview }>) {
             <Field.Label htmlFor="login-password">{copy.password}</Field.Label>
             <Input id="login-password" name="password" type="password" autoComplete="current-password" required disabled={pending || Boolean(preview)} invalid={Boolean(error)} />
           </Field.Root>
-          <Button type="submit" variant="primary" loading={pending} disabled={Boolean(preview)} className="mt-2 w-full">
+          <Button type="submit" variant="primary" size="lg" shape="cut" shimmer loading={pending} disabled={Boolean(preview)} className="w-full">
             {copy.submit}
           </Button>
         </form>
-      </Card.Body>
-    </Card.Root>
+      </AuthLayout>
+    </div>
   );
 }
