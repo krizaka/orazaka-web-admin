@@ -30,3 +30,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Search engines & AI assistants (Krizaka family contract)
+
+The contract is defined once, in krizaka-com `AGENTS.md` §2.4, and checked here by `scripts/check-seo-family.mjs` (a copy of
+the same dependency-free file in every site's repository — keep the copies identical; its unit test sits beside it).
+
+admin.orazaka.com is an operator console and is **never indexed**: `src/app/robots.ts` (`Disallow: /`), `X-Robots-Tag: noindex, nofollow` on every response (`next.config.ts`) and the robots meta. It has no sitemap and no llms.txt (`check-seo-family.mjs --console`). Tests: `test/seo.test.mts`.
