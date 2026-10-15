@@ -24,7 +24,7 @@ const app = spawn("npx", ["next", "dev", "--port", String(APP)], {
 });
 const stop = async () => { app.kill("SIGTERM"); edge.close(); };
 let failed = 0;
-const check = (ok, what) => { console.log(`${ok ? "ok  " : "FAIL"} ${what}`); if (!ok) failed += 1; };
+const check = (ok, what) => { process.stdout.write(`${ok ? "ok  " : "FAIL"} ${what}\n`); if (!ok) failed += 1; };
 
 try {
   for (let i = 0; i < 90; i += 1) {
