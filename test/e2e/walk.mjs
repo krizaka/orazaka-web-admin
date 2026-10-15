@@ -12,6 +12,8 @@ const PAGES = [
   ["/", "Platform supervision"],
   ["/operations", "Operations"],
   ["/models", "Models and capabilities"],
+  ["/users", "People"],
+  ["/audit", "Audit log"],
   ["/billing", "Facturation"],
   ["/studios", null],
 ];
@@ -60,6 +62,18 @@ try {
   await page.getByRole("switch", { name: /orazaka\.core\.chat/ }).click();
   await page.waitForTimeout(500);
   check(seen.includes("PUT /api/v1/features/orazaka.core.chat"), "switching a capability writes through the edge");
+  // Accounts: open a row, suspend, erase with the typed e-mail; the audit records both.
+  await page.goto(`http://localhost:${APP}/users`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: /Show details of bob@example.test/ }).click();
+  await page.getByRole("button", { name: "Suspend", exact: true }).click();
+  await page.getByText("Suspended").first().waitFor({ timeout: 15_000 });
+  check(seen.includes("POST /api/v1/admin/users/u-bob/suspend"), "an account is suspended through the edge");
+  await page.getByLabel("Type the account's e-mail to confirm").fill("bob@example.test");
+  await page.getByRole("button", { name: "Erase the account" }).click();
+  await page.getByText("bob@example.test").waitFor({ state: "detached", timeout: 15_000 });
+  check(seen.includes("DELETE /api/v1/admin/users/u-bob"), "an account is erased once its e-mail is typed");
+  await page.goto(`http://localhost:${APP}/audit`, { waitUntil: "networkidle" });
+  check(await page.getByText("admin.account_deleted").first().isVisible(), "the audit shows the erasure");
   await browser.close();
 } finally {
   await stop();

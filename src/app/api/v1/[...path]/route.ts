@@ -33,7 +33,7 @@ async function proxyRequest(req: Request, segments: string[], method: string) {
     const targetUrl = `${edgeUrl}/api/v1/${segments.join("/")}${search}`;
 
     let body: BodyInit | undefined;
-    if (["POST", "PUT", "PATCH"].includes(method)) {
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
       body = await req.text();
     }
 
@@ -45,6 +45,9 @@ async function proxyRequest(req: Request, segments: string[], method: string) {
       },
       body,
     });
+
+    // 204 / 205 / 304 carry no body — a Response cannot be built with one (the identity service answers 204 to an erasure).
+    if ([204, 205, 304].includes(response.status)) return new NextResponse(null, { status: response.status });
 
     const contentType = response.headers.get("content-type") || "";
     if (contentType.includes("application/json")) {

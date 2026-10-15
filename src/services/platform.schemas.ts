@@ -42,3 +42,22 @@ export const CapabilitySchema = z.object({
   enabled: z.boolean(),
 });
 export type Capability = z.infer<typeof CapabilitySchema>;
+
+/** The identity service's administration (`/api/v1/admin/users`): an account as an administrator sees it — never a credential. */
+export const AdminUserSchema = z.object({
+  id: z.string(),
+  username: z.string(),
+  email: z.string(),
+  enabled: z.boolean(),
+  admin: z.boolean(),
+  provider: z.string().nullish(),
+  authorities: z.array(z.string()).default([]),
+  createdAt: z.string().nullish(),
+});
+export type AdminUser = z.infer<typeof AdminUserSchema>;
+
+export const AdminUserPageSchema = z.object({ content: z.array(AdminUserSchema).default([]), total: z.number().default(0), page: z.number().default(0), size: z.number().default(25) });
+export type AdminUserPage = z.infer<typeof AdminUserPageSchema>;
+
+export const AdminAuditEntrySchema = z.object({ id: z.number(), at: z.string().nullish(), actor: z.string().nullish(), action: z.string(), targetId: z.string().nullish(), detail: z.string().nullish() });
+export type AdminAuditEntry = z.infer<typeof AdminAuditEntrySchema>;

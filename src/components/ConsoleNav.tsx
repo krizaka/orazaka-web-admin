@@ -15,6 +15,8 @@ const SECTIONS = [
   { href: "/", label: consoleCopy.nav.supervision },
   { href: "/operations", label: consoleCopy.nav.operations },
   { href: "/models", label: consoleCopy.nav.models },
+  { href: "/users", label: consoleCopy.nav.users },
+  { href: "/audit", label: consoleCopy.nav.audit },
   { href: "/billing", label: consoleCopy.nav.billing },
   { href: "/studios", label: consoleCopy.nav.studios },
 ] as const;

@@ -15,6 +15,13 @@ const capabilities = [
   { featureKey: "orazaka.core.media.image", handlerKey: "image", routingKey: "job.media.image", billableCapability: "IMAGE", latencyClass: "BATCH", enabled: true },
 ];
 
+const accounts = [
+  { id: "u-ada", username: "ada", email: "ada@example.test", enabled: true, admin: true, provider: "local", authorities: ["ROLE_USER", "ROLE_ADMIN"], createdAt: iso(9000) },
+  { id: "u-bob", username: "bob", email: "bob@example.test", enabled: true, admin: false, provider: "local", authorities: ["ROLE_USER"], createdAt: iso(5000) },
+];
+const trail = [{ id: 1, at: iso(30), actor: "ada@example.test", action: "admin.user_suspended", targetId: "u-bob", detail: null }];
+const record = (action, targetId) => trail.unshift({ id: trail.length + 1, at: iso(0), actor: "admin@example.test", action, targetId, detail: null });
+
 const routes = {
   "GET /api/v1/status/health": () => ({ status: "Sovereign-Ready", pgVectorConnected: true, pgVectorExtensionInstalled: true, ollamaConnected: true, ollamaModels: ["llama3.2"], defaultProvider: "ollama", ollamaBaseUrl: "http://ollama:11434", message: "ok" }),
   "GET /api/v1/status/infrastructure": () => ({ video: false, image: true }),
@@ -23,6 +30,8 @@ const routes = {
   "GET /api/v1/models/catalog": () => models,
   "GET /api/v1/models/providers": () => ["ollama", "comfyui"],
   "GET /api/v1/features/all": () => capabilities,
+  "GET /api/v1/admin/users": () => ({ content: accounts, total: accounts.length, page: 0, size: 25 }),
+  "GET /api/v1/admin/users/audit": () => trail,
   "GET /api/v1/billing/usage": () => [],
   "GET /api/v1/billing/usage/consumers": () => [],
 };
@@ -33,7 +42,7 @@ export function startMockEdge(port, seen = []) {
     const server = http.createServer((req, res) => {
       const url = new URL(req.url ?? "/", "http://x");
       seen.push(`${req.method} ${url.pathname}`);
-      const send = (status, body) => { res.writeHead(status, { "Content-Type": "application/json" }); res.end(JSON.stringify(body)); };
+      const send = (status, body) => { if (status === 204) { res.writeHead(204); return res.end(); } res.writeHead(status, { "Content-Type": "application/json" }); res.end(JSON.stringify(body)); };
       let raw = "";
       req.on("data", (c) => (raw += c));
       req.on("end", () => {
@@ -49,6 +58,20 @@ export function startMockEdge(port, seen = []) {
           if (!found) return send(404, {});
           found.enabled = Boolean(JSON.parse(raw).isEnabled);
           return send(200, found);
+        }
+        const acct = /^\/api\/v1\/admin\/users\/([\w-]+)(?:\/(suspend|restore|admin|export))?$/.exec(url.pathname);
+        if (acct && acct[1] !== "audit") {
+          const found = accounts.find((a) => a.id === acct[1]);
+          if (!found) return send(404, {});
+          const op = acct[2];
+          if (req.method === "POST" && op === "suspend") { found.enabled = false; record("admin.user_suspended", found.id); return send(200, found); }
+          if (req.method === "POST" && op === "restore") { found.enabled = true; record("admin.user_restored", found.id); return send(200, found); }
+          if (req.method === "PUT" && op === "admin") { found.admin = Boolean(JSON.parse(raw).admin); record("admin.user_role_changed", found.id); return send(200, found); }
+          if (req.method === "GET" && op === "export") return send(200, { format: "krizaka-identity-export/1", account: { id: found.id, email: found.email } });
+          if (req.method === "DELETE" && !op) {
+            if (JSON.parse(raw || "{}").confirmEmail !== found.email) return send(409, { code: "CONFIRM_MISMATCH" });
+            accounts.splice(accounts.indexOf(found), 1); record("admin.account_deleted", found.id); return send(204, null);
+          }
         }
         const route = routes[`${req.method} ${url.pathname}`];
         return route ? send(200, route()) : send(404, {});
