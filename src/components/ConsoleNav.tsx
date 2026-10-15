@@ -13,6 +13,8 @@ import { APP_ENV } from "@/core/config/version";
 
 const SECTIONS = [
   { href: "/", label: consoleCopy.nav.supervision },
+  { href: "/operations", label: consoleCopy.nav.operations },
+  { href: "/models", label: consoleCopy.nav.models },
   { href: "/billing", label: consoleCopy.nav.billing },
   { href: "/studios", label: consoleCopy.nav.studios },
 ] as const;

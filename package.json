@@ -8,7 +8,8 @@
     "start": "next start --port ${PORT:-3001}",
     "lint": "eslint && krizaka-ratchet",
     "validate": "depcruise src --config .dependency-cruiser.cjs && npm run lint && npm test",
-    "test": "node --test test/*.test.mts"
+    "test": "node --test test/*.test.mts",
+    "e2e": "node test/e2e/walk.mjs"
   },
   "dependencies": {
     "@krizaka/charts": "^0.1.0",
