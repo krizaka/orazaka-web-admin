@@ -3,6 +3,9 @@ import type { Health } from "@/services/platform.schemas";
 
 export type QueueDepths = Record<JobStatus, number>;
 
+/** Every state the queue shows, in reading order. A `Record<JobStatus, …>` forces a new contract state to be added here. */
+export const QUEUE_STATES = ["PENDING", "PROCESSING", "COMPLETED", "FAILED", "CANCELLED", "DELETED"] as const satisfies readonly JobStatus[];
+
 /** How many jobs wait, run, ended and failed: the queue's depth as an operator reads it. */
 export function queueDepths(jobs: readonly JobRecord[]): QueueDepths {
   const depths: QueueDepths = { PENDING: 0, PROCESSING: 0, COMPLETED: 0, FAILED: 0, CANCELLED: 0, DELETED: 0 };
