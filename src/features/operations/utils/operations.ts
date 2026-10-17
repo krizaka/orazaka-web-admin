@@ -5,7 +5,7 @@ export type QueueDepths = Record<JobStatus, number>;
 
 /** How many jobs wait, run, ended and failed: the queue's depth as an operator reads it. */
 export function queueDepths(jobs: readonly JobRecord[]): QueueDepths {
-  const depths: QueueDepths = { PENDING: 0, PROCESSING: 0, COMPLETED: 0, FAILED: 0 };
+  const depths: QueueDepths = { PENDING: 0, PROCESSING: 0, COMPLETED: 0, FAILED: 0, CANCELLED: 0, DELETED: 0 };
   for (const job of jobs) depths[job.status] += 1;
   return depths;
 }

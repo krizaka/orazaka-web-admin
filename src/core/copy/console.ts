@@ -85,7 +85,7 @@ export const consoleCopy = {
     offline: "Offline",
     queue: "Queue depth",
     queueDesc: "The latest jobs of every workspace, by state",
-    states: { PENDING: "Waiting", PROCESSING: "Running", COMPLETED: "Done", FAILED: "Failed" },
+    states: { PENDING: "Waiting", PROCESSING: "Running", COMPLETED: "Done", FAILED: "Failed", CANCELLED: "Cancelled", DELETED: "Deleted" },
     failures: "Recent errors",
     failuresDesc: "Failed jobs, newest first",
     noFailures: "No failed job in the latest runs.",
