@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Badge, Button } from "@krizaka/orazaka-design-system";
 import { Card } from "@krizaka/ui/card";
+import { DataTable, type DataTableColumn } from "@krizaka/ui/data-table";
 import { formatCredits, type MarginPreview, type PricebookRate } from "@krizaka/orazaka-shared";
 import { BillingField } from "./BillingField";
 import { BillingAdminApi } from "@/services/billing.admin.api";
@@ -81,6 +82,25 @@ export function PricebookScreen() {
     }
   };
 
+  const columns: DataTableColumn<(typeof rates)[number]>[] = [
+    { id: "capability", header: "Capacité", sortable: true, card: "title" },
+    { id: "modelName", header: "Modèle", sortable: true, value: (rate) => rate.modelName ?? "—" },
+    { id: "unit", header: "Unité", sortable: true },
+    { id: "creditsPerUnit", header: "Crédits / unité", sortable: true, align: "end" },
+    { id: "estimateCredits", header: "Estimation", sortable: true, align: "end", cell: (rate) => formatCredits(rate.estimateCredits) },
+    { id: "version", header: "v", sortable: true, align: "end" },
+    {
+      id: "actions",
+      header: "",
+      align: "end",
+      cell: (rate) => (
+        <Button size="sm" variant="ghost" onClick={() => edit(rate)}>
+          Modifier
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <section className="space-y-6">
       <header>
@@ -93,43 +113,13 @@ export function PricebookScreen() {
 
       {error && <p className="text-sm text-fg-danger">{error}</p>}
 
-      <Card.Root>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-fg-muted">
-              <th className="py-2">Capacité</th>
-              <th>Modèle</th>
-              <th>Unité</th>
-              <th className="text-right">Crédits / unité</th>
-              <th className="text-right">Estimation</th>
-              <th className="text-right">v</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {rates.map((rate) => (
-              <tr
-                key={`${rate.capability}:${rate.modelName ?? "*"}`}
-                className="border-t border-border-subtle"
-              >
-                <td className="py-2 text-fg">{rate.capability}</td>
-                <td className="text-fg-muted">{rate.modelName ?? "—"}</td>
-                <td className="text-fg-muted">{rate.unit}</td>
-                <td className="text-right text-fg">{rate.creditsPerUnit}</td>
-                <td className="text-right text-fg">
-                  {formatCredits(rate.estimateCredits)}
-                </td>
-                <td className="text-right text-fg-muted">{rate.version}</td>
-                <td className="text-right">
-                  <Button size="sm" variant="ghost" onClick={() => edit(rate)}>
-                    Modifier
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card.Root>
+      <DataTable
+        caption="Grille tarifaire"
+        rows={rates}
+        columns={columns}
+        getRowId={(rate) => `${rate.capability}:${rate.modelName ?? "*"}`}
+        labels={{ loading: "Lecture de la grille", empty: "Aucun tarif." }}
+      />
 
       {draft && (
         <Card.Root className="p-5">

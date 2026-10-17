@@ -1,0 +1,12 @@
+id: no-hand-table
+language: Tsx
+severity: error
+message: "No hand-made `<table>`: a list of rows is `DataTable` (`@krizaka/ui/data-table`) — sortable, skeleton rows, cards on a narrow screen. Plans side by side are `ComparisonTable` (`@krizaka/ui/comparison-table`)."
+rule:
+  any:
+    - pattern: <table $$$A>$$$B</table>
+    - pattern: <table>$$$B</table>
+ignores:
+  - "**/node_modules/**"
+  - "**/.next/**"
+  - "**/dist/**"
