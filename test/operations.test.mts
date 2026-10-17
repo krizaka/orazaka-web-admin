@@ -7,8 +7,11 @@ import { providerSummaries, withCapability } from "../src/features/catalogue/uti
 const job = (over: object) => ({ id: "j", userId: "u", featureKey: "orazaka.core.chat", status: "COMPLETED", payload: {}, result: {}, createdAt: "2026-10-15T10:00:00Z", updatedAt: "2026-10-15T10:00:12Z", ...over });
 
 test("queue: every state is counted, and an empty queue is all zeros", () => {
-  assert.deepEqual(queueDepths([]), { PENDING: 0, PROCESSING: 0, COMPLETED: 0, FAILED: 0 });
-  assert.deepEqual(queueDepths([job({}), job({ status: "FAILED" }), job({ status: "PENDING" }), job({ status: "PENDING" })]), { PENDING: 2, PROCESSING: 0, COMPLETED: 1, FAILED: 1 });
+  assert.deepEqual(queueDepths([]), { PENDING: 0, PROCESSING: 0, COMPLETED: 0, FAILED: 0, CANCELLED: 0, DELETED: 0 });
+  assert.deepEqual(
+    queueDepths([job({}), job({ status: "FAILED" }), job({ status: "PENDING" }), job({ status: "PENDING" }), job({ status: "CANCELLED" })]),
+    { PENDING: 2, PROCESSING: 0, COMPLETED: 1, FAILED: 1, CANCELLED: 1, DELETED: 0 },
+  );
 });
 
 test("failures: only the failed, newest first, capped", () => {
