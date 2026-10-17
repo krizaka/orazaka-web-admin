@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Badge, Button } from "@krizaka/orazaka-design-system";
-import { Card } from "@krizaka/ui/card";
+import { DataTable, type DataTableColumn } from "@krizaka/ui/data-table";
 import {
   capabilityForModelCategory,
   isModelPriced,
@@ -115,6 +115,46 @@ export function ModelPricingScreen() {
     }
   };
 
+  const columns: DataTableColumn<(typeof rows)[number]>[] = [
+    { id: "model", header: "Modèle", card: "title", value: ({ model }) => model.modelLabel || model.modelName },
+    { id: "category", header: "Catégorie", value: ({ model }) => model.category },
+    { id: "capability", header: "Capacité" },
+    { id: "unit", header: "Unité", value: ({ own, fallback }) => own?.unit ?? fallback?.unit ?? "—" },
+    {
+      id: "creditsPerUnit",
+      header: "Crédits / unité",
+      align: "end",
+      value: ({ own, fallback }) => own?.creditsPerUnit ?? fallback?.creditsPerUnit ?? "—",
+    },
+    {
+      id: "estimateCredits",
+      header: "Estimation",
+      align: "end",
+      value: ({ own, fallback }) => own?.estimateCredits ?? fallback?.estimateCredits ?? "—",
+    },
+    {
+      id: "status",
+      header: "Statut",
+      cell: ({ own, priced }) => (
+        <>
+          {!priced && <Badge variant="danger">non tarifé</Badge>}
+          {priced && own && <Badge variant="success">tarif dédié</Badge>}
+          {priced && !own && <Badge variant="default">tarif par défaut</Badge>}
+        </>
+      ),
+    },
+    {
+      id: "actions",
+      header: "",
+      align: "end",
+      cell: ({ model, own }) => (
+        <Button size="sm" variant="ghost" onClick={() => startDraft(model, own)}>
+          {own ? "Modifier" : "Tarifer"}
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <section className="space-y-6">
       <header>
@@ -135,52 +175,13 @@ export function ModelPricingScreen() {
       )}
       {error && <p className="text-sm text-fg-danger">{error}</p>}
 
-      <Card.Root>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-fg-muted">
-              <th className="py-2">Modèle</th>
-              <th>Catégorie</th>
-              <th>Capacité</th>
-              <th>Unité</th>
-              <th className="text-right">Crédits / unité</th>
-              <th className="text-right">Estimation</th>
-              <th>Statut</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(({ model, capability, own, fallback, priced }) => (
-              <tr key={model.modelName} className="border-t border-border-subtle">
-                <td className="py-2 text-fg">
-                  {model.modelLabel || model.modelName}
-                </td>
-                <td className="text-fg-muted">{model.category}</td>
-                <td className="text-fg-muted">{capability}</td>
-                <td className="text-fg-muted">
-                  {own?.unit ?? fallback?.unit ?? "—"}
-                </td>
-                <td className="text-right text-fg">
-                  {own?.creditsPerUnit ?? fallback?.creditsPerUnit ?? "—"}
-                </td>
-                <td className="text-right text-fg">
-                  {own?.estimateCredits ?? fallback?.estimateCredits ?? "—"}
-                </td>
-                <td>
-                  {!priced && <Badge variant="danger">non tarifé</Badge>}
-                  {priced && own && <Badge variant="success">tarif dédié</Badge>}
-                  {priced && !own && <Badge variant="default">tarif par défaut</Badge>}
-                </td>
-                <td className="text-right">
-                  <Button size="sm" variant="ghost" onClick={() => startDraft(model, own)}>
-                    {own ? "Modifier" : "Tarifer"}
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card.Root>
+      <DataTable
+        caption="Tarification par modèle"
+        rows={rows}
+        columns={columns}
+        getRowId={(row) => row.model.modelName}
+        labels={{ loading: "Lecture des modèles", empty: "Aucun modèle." }}
+      />
 
       {draft && (
         <ModelRateEditor

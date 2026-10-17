@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { DataTable, type DataTableColumn } from "@krizaka/ui/data-table";
 import { StudioAdminApi, type StudioUsageRow } from "@/services/studio.admin.api";
 
 /**
@@ -38,64 +39,68 @@ export function StudioAnalyticsScreen() {
   }
 
   return (
-    <table className="w-full text-sm">
-      <thead>
-        <tr className="text-left text-xs text-fg-muted">
-          <th className="py-1">Studio</th>
-          <th>Installations</th>
-          <th>Exécutions</th>
-          <th>Réussite</th>
-          <th>Crédits / exéc.</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
-          <StudioAnalyticsRow key={row.studioKey} row={row} />
-        ))}
-      </tbody>
-    </table>
+    <DataTable
+      caption="Usage des Studios"
+      rows={rows}
+      columns={COLUMNS}
+      getRowId={(row) => row.studioKey}
+      labels={{ loading: "Lecture de l'usage", empty: "Aucun Studio mesuré." }}
+    />
   );
 }
 
-interface StudioAnalyticsRowProps {
-  row: StudioUsageRow;
-}
+// Below half the runs succeeding, a Studio is a support queue rather than a product.
+const isHealthy = (row: StudioUsageRow) => row.runs > 0 && row.successRate >= 0.5;
 
-/** One measured Studio. A sub-component so the table above stays a table. */
-function StudioAnalyticsRow({ row }: Readonly<StudioAnalyticsRowProps>) {
-  // Below half the runs succeeding, a Studio is a support queue rather than a product.
-  const healthy = row.runs > 0 && row.successRate >= 0.5;
-
-  return (
-    <tr className="border-t border-border-subtle">
-      <td className="py-2">
+const COLUMNS: DataTableColumn<StudioUsageRow>[] = [
+  {
+    id: "label",
+    header: "Studio",
+    sortable: true,
+    card: "title",
+    cell: (row) => (
+      <>
         {row.label}
-        <span className="block font-mono text-[10px] text-fg-muted">
-          {row.studioKey}
-        </span>
-      </td>
-      <td>{row.installations}</td>
-      <td>
+        <span className="block font-mono text-[10px] text-fg-muted">{row.studioKey}</span>
+      </>
+    ),
+  },
+  { id: "installations", header: "Installations", sortable: true, align: "end" },
+  {
+    id: "runs",
+    header: "Exécutions",
+    sortable: true,
+    align: "end",
+    cell: (row) => (
+      <>
         {row.runs}
-        {row.failed > 0 && (
-          <span className="text-fg-danger"> ({row.failed} échecs)</span>
-        )}
-      </td>
-      <td className={healthy ? "text-fg-success" : "text-fg-muted"}>
+        {row.failed > 0 && <span className="text-fg-danger"> ({row.failed} échecs)</span>}
+      </>
+    ),
+  },
+  {
+    id: "successRate",
+    header: "Réussite",
+    sortable: true,
+    align: "end",
+    cell: (row) => (
+      <span className={isHealthy(row) ? "text-fg-success" : "text-fg-muted"}>
         {row.runs === 0 ? "—" : `${Math.round(row.successRate * 100)} %`}
-      </td>
-      <td>{row.estimatedCredits}</td>
-      <td className="text-right">
-        {row.installedButUnused && (
-          <span
-            title="Installé puis jamais lancé — le signal de churn le plus net du produit"
-            className="text-[11px] text-fg-warning"
-          >
-            installé, jamais lancé
-          </span>
-        )}
-      </td>
-    </tr>
-  );
-}
+      </span>
+    ),
+  },
+  { id: "estimatedCredits", header: "Crédits / exéc.", sortable: true, align: "end" },
+  {
+    id: "installedButUnused",
+    header: "",
+    cell: (row) =>
+      row.installedButUnused ? (
+        <span
+          title="Installé puis jamais lancé — le signal de churn le plus net du produit"
+          className="text-[11px] text-fg-warning"
+        >
+          installé, jamais lancé
+        </span>
+      ) : null,
+  },
+];

@@ -1,0 +1,11 @@
+id: no-hand-table
+valid:
+  - |
+    const a = <DataTable rows={rows} columns={columns} />;
+  - |
+    const a = <ComparisonTable plans={plans} rows={rows} />;
+invalid:
+  - |
+    const a = <table className="w-full"><tbody /></table>;
+  - |
+    const a = <table><tr /></table>;
