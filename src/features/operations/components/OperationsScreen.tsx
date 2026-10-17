@@ -7,7 +7,7 @@ import { Button } from "@krizaka/ui/button";
 import { Card } from "@krizaka/ui/card";
 import { Stat, StatGrid } from "@krizaka/ui/stat";
 import { DataTable, DataTableFilters, type DataTableColumn } from "@krizaka/ui/data-table";
-import type { JobRecord } from "@krizaka/orazaka-shared";
+import type { JobRecord, JobStatus } from "@krizaka/orazaka-shared";
 import { consoleCopy } from "@/core/copy/console";
 import { APP_ENV, APP_VERSION } from "@/core/config/version";
 import { QUEUE_STATES, dependencyChecks, jobSeconds, queueDepths, recentFailures } from "@/features/operations/utils/operations";
@@ -16,9 +16,13 @@ import { useOperations } from "@/features/operations/hooks/useOperations";
 const o = consoleCopy.operations;
 const when = (iso: string) => iso.replace("T", " ").slice(0, 16);
 
+const STATE_TONE: Record<JobStatus, "danger" | "success" | "warning" | "neutral"> = {
+  PENDING: "warning", PROCESSING: "warning", COMPLETED: "success", FAILED: "danger", CANCELLED: "neutral", DELETED: "neutral",
+};
+
 const columns: DataTableColumn<JobRecord>[] = [
   { id: "featureKey", header: o.feature, sortable: true, filter: "facet", card: "title", cell: (j) => j.featureKey.replace(/^orazaka\./, "") },
-  { id: "status", header: o.status, sortable: true, filter: "facet", cell: (j) => <Badge tone={j.status === "FAILED" ? "danger" : j.status === "COMPLETED" ? "success" : j.status === "CANCELLED" || j.status === "DELETED" ? "neutral" : "warning"}>{o.states[j.status]}</Badge> },
+  { id: "status", header: o.status, sortable: true, filter: "facet", cell: (j) => <Badge tone={STATE_TONE[j.status]}>{o.states[j.status]}</Badge> },
   { id: "userId", header: o.user, value: (j) => j.userId, cell: (j) => `${j.userId.slice(0, 8)}…` },
   { id: "createdAt", header: o.started, sortable: true, cell: (j) => when(j.createdAt) },
   { id: "seconds", header: o.seconds, sortable: true, align: "end", value: (j) => jobSeconds(j), cell: (j) => jobSeconds(j) ?? "—" },
